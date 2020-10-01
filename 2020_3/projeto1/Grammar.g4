@@ -122,6 +122,63 @@ IDENTIFIER: (CHAR | UNDER | NUMBER) (CHAR | UNDER | NUMBER)* ;
 STRING: QUOTE .*? QUOTE;
 
 
+body : '{' statment* '}'
+     ;
+
+variable
+	: types identifier ('=' expression)? ';'	
+	;
+
+argumentsType
+	:  types IDENTIFIER
+	;
+
+arguments
+	: argumentsType (',' argumentsType)*
+	;
+
+assigment
+	: identifier '=' expression ';'
+	;
+
+returnExp
+	: 'return' expression? ';'
+	;
+
+expression
+	: identifier
+	| integer
+	| floater
+	| expression('+'| '-') expression
+	| expression('*'| '/') expression
+	|'(' expression ')';
+
+
+
+
+functionDec
+	: types identifier '(' arguments ')' body
+	;
+
+statment
+	: variable
+	| assigment
+	| expression
+	| returnExp;
+
+/* lexer */ 
+
+NUMBER: [0-9]+;
+IDENTIFIER: [a-z];
+COMMENTBLOCK: '/*' .*? '*/' -> skip;
+COMMENTLINE: '//' .*? '\n' -> skip;
+WHITESPACE: [ \t\n\r]+ -> skip;
+
+FUNCTIONINT: 'int';
+FUNCTIONFLOAT: 'float';
+
+INT: NUMBER+ ;
+FLOAT: NUMBER+ '.' NUMBER+ ;
 
 /*
 MANUAL
