@@ -13,7 +13,6 @@ integer: INT;
 floater: FLOAT;
 string: STRING;
 
-
 types
 	: TYPEINT
 	| TYPEFLOAT
@@ -127,11 +126,15 @@ body : '{' statment* '}'
      ;
 
 variable
-	: types identifier ('=' expression)? ';'	
+	: types identifier ('=' expression)?  ';'	
 	;
 
-functionDec
+function_definition
 	: types identifier '(' arguments? ')' body
+	;
+
+function_call
+	: identifier '(' expression (',' expression)* ')' ';'
 	;
 
 arguments
@@ -159,6 +162,8 @@ expression
 	: identifier
 	| integer
 	| floater
+	| string
+	| ('+'| '-') expression
 	| expression('*'| '/') expression
 	| expression('+'| '-') expression
 	| expression('*='| '/=') expression
@@ -172,15 +177,19 @@ statment
 	: variable
 	| assigment
 	| expressionStat
+	| function_call
 	| returnStat;
 
 /* lexer */ 
 
 fragment NUMBER    : [0-9];
 fragment CHAR: [a-z];
+UNDER: '_';
+QUOTE: '"' ;
 
 COMMENTBLOCK: '/*' .*? '*/' -> skip;
 COMMENTLINE: '//' .*? '\n' -> skip;
+LIB: '#' .*? '\n' -> skip;
 WHITESPACE: [ \t\n\r]+ -> skip;
 
 TYPEINT: 'int';
@@ -189,7 +198,8 @@ TYPESTRING: 'string';
 
 INT: NUMBER+ ;
 FLOAT: NUMBER+ '.' NUMBER+ ;
-IDENTIFIER: (CHAR) (CHAR)* ;
+IDENTIFIER: (CHAR | UNDER | NUMBER) (CHAR | UNDER | NUMBER)* ;
+STRING: QUOTE .*? QUOTE;
 
 /*
 MANUAL
