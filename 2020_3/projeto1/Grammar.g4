@@ -150,7 +150,7 @@ arguments
 	;
 	
 argumentsType
-	:  types IDENTIFIER
+	:  types identifier
 	;
 
 body : '{' statement* '}'
@@ -174,11 +174,12 @@ expression
 	| array
 	| ('+'| '-') expression
 	| '!'expression
-	| expression('++' |'--')
+	| identifier('++' |'--')
 	| expression('<'| '>'|'<='| '>=') expression
 	| expression('*'| '/') expression
 	| expression('+'| '-') expression
 	| expression('*='| '/=') expression
+	| identifier('+='| '-=') expression
 	|'(' expression ')'
 	| function_call;
 
@@ -187,7 +188,7 @@ expressionStat
 	;
 
 if_statement
-	: IF '(' expression ')' body else_statement
+	: IF '(' expression ')' (body | statement) else_statement*
 	;
 else_statement
 	: ELSE (body | statement)
@@ -195,11 +196,11 @@ else_statement
 
 
 for_loop
-	: FOR '(' variable expression ';' expression ')' body
+	: FOR '(' variable_definition expression ';' expression ')' body
 	;
 
 statement
-	: variable
+	: variable_definition
 	| assigment	
 	| if_statement
 	| for_loop
