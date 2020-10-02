@@ -54,7 +54,7 @@ assigment
 	;
 
 returnStat
-	: 'return' expression? ';'
+	: 'return' (expression | function_call)? ';'
 	;
 
 expression
