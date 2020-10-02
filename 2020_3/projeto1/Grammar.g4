@@ -33,7 +33,7 @@ function_definition
 	;
 
 function_call
-	: identifier '(' expression (',' (expression | function_call))* ')' 
+	: identifier '(' expression (',' expression )* ')' 
 	;
 
 arguments
@@ -44,7 +44,7 @@ argumentsType
 	:  types IDENTIFIER
 	;
 
-body : '{' statment* '}'
+body : '{' statement* '}'
      ;
 
 
@@ -54,7 +54,7 @@ assigment
 	;
 
 returnStat
-	: 'return' (expression | function_call)? ';'
+	: 'return' expression? ';'
 	;
 
 expression
@@ -64,20 +64,30 @@ expression
 	| string
 	| array
 	| ('+'| '-') expression
+	| '!'expression
+	| expression('<'| '>'|'<='| '>=') expression
 	| expression('*'| '/') expression
 	| expression('+'| '-') expression
 	| expression('*='| '/=') expression
-	|'(' expression ')';
+	|'(' expression ')'
+	| function_call;
 
 expressionStat
 	: expression ';'
 	;
 
-statment
+if_statement
+	: IF '(' expression ')' body else_statement
+	;
+else_statement
+	: ELSE (body | statement)
+	;
+
+statement
 	: variable
-	| assigment
+	| assigment	
+	| if_statement
 	| expressionStat
-	| function_call ';'
 	| returnStat;
 
 /* lexer */ 
@@ -96,10 +106,15 @@ TYPEINT: 'int';
 TYPEFLOAT: 'float';
 TYPESTRING: 'string';
 
+IF: 'if';
+ELSE: 'else';
+
 INT: NUMBER+ ;
 FLOAT: NUMBER+ '.' NUMBER+ ;
 IDENTIFIER: (CHAR | UNDER | NUMBER) (CHAR | UNDER | NUMBER)* ;
 STRING: QUOTE .*? QUOTE;
+
+
 
 /*
 MANUAL
