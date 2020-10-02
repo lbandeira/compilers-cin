@@ -13,6 +13,7 @@ integer: INT;
 floater: FLOAT;
 string: STRING;
 
+
 types
 	: TYPEINT
 	| TYPEFLOAT
@@ -129,19 +130,28 @@ variable
 	: types identifier ('=' expression)? ';'	
 	;
 
-argumentsType
-	:  types IDENTIFIER
+functionDec
+	: types identifier '(' arguments? ')' body
 	;
 
 arguments
 	: argumentsType (',' argumentsType)*
 	;
+	
+argumentsType
+	:  types IDENTIFIER
+	;
+
+body : '{' statment* '}'
+     ;
+
+
 
 assigment
 	: identifier '=' expression ';'
 	;
 
-returnExp
+returnStat
 	: 'return' expression? ';'
 	;
 
@@ -149,36 +159,37 @@ expression
 	: identifier
 	| integer
 	| floater
-	| expression('+'| '-') expression
 	| expression('*'| '/') expression
+	| expression('+'| '-') expression
+	| expression('*='| '/=') expression
 	|'(' expression ')';
 
-
-
-
-functionDec
-	: types identifier '(' arguments ')' body
+expressionStat
+	: expression ';'
 	;
 
 statment
 	: variable
 	| assigment
-	| expression
-	| returnExp;
+	| expressionStat
+	| returnStat;
 
 /* lexer */ 
 
-NUMBER: [0-9]+;
-IDENTIFIER: [a-z];
+fragment NUMBER    : [0-9];
+fragment CHAR: [a-z];
+
 COMMENTBLOCK: '/*' .*? '*/' -> skip;
 COMMENTLINE: '//' .*? '\n' -> skip;
 WHITESPACE: [ \t\n\r]+ -> skip;
 
-FUNCTIONINT: 'int';
-FUNCTIONFLOAT: 'float';
+TYPEINT: 'int';
+TYPEFLOAT: 'float';
+TYPESTRING: 'string';
 
 INT: NUMBER+ ;
 FLOAT: NUMBER+ '.' NUMBER+ ;
+IDENTIFIER: (CHAR) (CHAR)* ;
 
 /*
 MANUAL
