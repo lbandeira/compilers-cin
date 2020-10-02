@@ -17,7 +17,15 @@ types
 	;
 
 variable
-	: types identifier ('=' expression)?  ';'	
+	: types (identifier | array) ('=' (expression | array_literal)) (',' identifier '=' expression)*?  ';'	
+	;
+
+array
+	: identifier '[' expression ']'
+	;
+
+array_literal
+	: '{' expression (',' expression)*'}'
 	;
 
 function_definition
@@ -25,7 +33,7 @@ function_definition
 	;
 
 function_call
-	: identifier '(' expression (',' expression)* ')' ';'
+	: identifier '(' expression (',' (expression | function_call))* ')' 
 	;
 
 arguments
@@ -54,6 +62,7 @@ expression
 	| integer
 	| floater
 	| string
+	| array
 	| ('+'| '-') expression
 	| expression('*'| '/') expression
 	| expression('+'| '-') expression
@@ -68,7 +77,7 @@ statment
 	: variable
 	| assigment
 	| expressionStat
-	| function_call
+	| function_call ';'
 	| returnStat;
 
 /* lexer */ 
