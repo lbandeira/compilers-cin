@@ -159,7 +159,7 @@ body : '{' statement* '}'
 
 
 assigment
-	: identifier '=' expression ';'
+	: identifier ('=' expression | '++' | '--') ';'
 	;
 
 returnStat
@@ -174,6 +174,7 @@ expression
 	| array
 	| ('+'| '-') expression
 	| '!'expression
+	| expression('++' |'--')
 	| expression('<'| '>'|'<='| '>=') expression
 	| expression('*'| '/') expression
 	| expression('+'| '-') expression
@@ -192,10 +193,16 @@ else_statement
 	: ELSE (body | statement)
 	;
 
+
+for_loop
+	: FOR '(' variable expression ';' expression ')' body
+	;
+
 statement
 	: variable
 	| assigment	
 	| if_statement
+	| for_loop
 	| expressionStat
 	| returnStat;
 
@@ -217,6 +224,7 @@ TYPESTRING: 'string';
 
 IF: 'if';
 ELSE: 'else';
+FOR: 'for';
 
 INT: NUMBER+ ;
 FLOAT: NUMBER+ '.' NUMBER+ ;
