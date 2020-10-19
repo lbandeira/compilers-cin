@@ -183,17 +183,14 @@ expression
 	|'(' expression ')'
 	| function_call;
 
-expressionStat
-	: expression ';'
-	;
 
 if_statement
 	: IF '(' expression ')' (body | statement) else_statement*
 	;
+
 else_statement
 	: ELSE (body | statement)
 	;
-
 
 for_loop
 	: FOR '(' variable_definition expression ';' expression ')' body
@@ -204,7 +201,7 @@ statement
 	| assigment	
 	| if_statement
 	| for_loop
-	| expressionStat
+	| expression ';'
 	| returnStat;
 
 /* lexer */ 
