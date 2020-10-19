@@ -1,4 +1,7 @@
 /* nome da gramática -- deve ser o mesmo nome do arquivo .g4 e começar com letra maiúscula*/
+/* 		PROJETO 1 - COMPILADORES
+* 	Lais Bandeira Miranda da Silva
+***************************************/ 
 grammar Grammar;
 
 /* parser */
@@ -47,8 +50,6 @@ argumentsType
 body : '{' statement* '}'
      ;
 
-
-
 assigment
 	: identifier ('=' expression | '++' | '--') ';'
 	;
@@ -74,17 +75,14 @@ expression
 	|'(' expression ')'
 	| function_call;
 
-expressionStat
-	: expression ';'
-	;
 
 if_statement
 	: IF '(' expression ')' (body | statement) else_statement*
 	;
+
 else_statement
 	: ELSE (body | statement)
 	;
-
 
 for_loop
 	: FOR '(' variable_definition expression ';' expression ')' body
@@ -95,7 +93,7 @@ statement
 	| assigment	
 	| if_statement
 	| for_loop
-	| expressionStat
+	| expression ';'
 	| returnStat;
 
 /* lexer */ 
